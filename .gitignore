@@ -1,0 +1,6 @@
+.DS_Store
+config.js
+.claude/*.local.json
+experiment_files
+git_old
+node_modules
