@@ -6,10 +6,12 @@ This project tracks the route 1 MBTA busses that travel Mass Ave in Boston and C
 ## How To Run
 - Fork the repository
 - Clone it to your machine
-- Sign into mapbox [https://www.mapbox.com/](https://www.mapbox.com/).
-- Create a token.
+- Create a mapbox account or sign in. [https://www.mapbox.com](https://www.mapbox.com).
+- Create a token for this project.
+- Create an MBTA developer account or sign in. [https://api-v3.mbta.com](https://api-v3.mbta.com).
+- Request a new key for this project.
 - Create a config.js file in the root directory of this project using config.example.js as a template.
-- Replace 'mapbox-api-key-goes-here' with your mapbox access token.
+- Replace 'mapbox-api-key-goes-here' and 'mbta-api-key-goes-here' with your API keys.
 - Use npx http-server in the command line or the Live Server extension in VS Code to start a server.
 - Navigate to the appropriate localhost port in your browser.
 

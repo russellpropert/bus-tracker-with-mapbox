@@ -1,6 +1,6 @@
-import API_KEY from './config.js';
+import { MAPBOX_API_KEY, MBTA_API_KEY } from './config.js';
 
-mapboxgl.accessToken = API_KEY;
+mapboxgl.accessToken = MAPBOX_API_KEY;
 
 const markers = [];
 
@@ -13,9 +13,6 @@ const map = new mapboxgl.Map({
 
 const updateMarkers = (data) => {
   data = data.data;
-  console.log(new Date());
-  console.log(data);
-  console.log(markers);
 
   const len = Math.max(data.length, markers.length);
 
@@ -30,13 +27,21 @@ const updateMarkers = (data) => {
       markers[i].setLngLat([data[i].attributes.longitude, data[i].attributes.latitude]);
     }
   }
+};
+
+let mbtaLastModified = null;
+const mbta_url = 'https://api-v3.mbta.com/vehicles?filter[route]=1&include=trip';
+const mbta_options = {
+  headers: {
+    'X-API-Key': MBTA_API_KEY,
+    'If-Modified-Since': mbtaLastModified
+  }
 }
 
-const url = 'https://api-v3.mbta.com/vehicles?filter[route]=1&include=trip';
-
-async function getBuses(){
+const getBuses = async () => {
   try {
-    const response = await fetch(url);
+    const response = await fetch(mbta_url, mbta_options);
+    mbtaLastModified = response.headers.get('Last-Modified');
     const data = await response.json();
     return data;
   } catch (error) {
@@ -56,4 +61,4 @@ setInterval(() => {
     .catch((error) => {
       console.error(error);
     });
-}, 5000);
+}, 1000);
