@@ -1,4 +1,4 @@
-import { MAPBOX_API_KEY, MBTA_API_KEY } from './config.js';
+import { MAPBOX_API_KEY } from './config.js';
 
 mapboxgl.accessToken = MAPBOX_API_KEY;
 
@@ -29,27 +29,22 @@ const updateMarkers = (vehicles) => {
   }
 };
 
-const mbta_url = 'https://api-v3.mbta.com/vehicles?filter[route]=1&include=trip';
-const mbta_options = {
-  headers: {
-    'X-API-Key': MBTA_API_KEY
-  }
-}
-let vehicles = { data: [] };
+const noVehicles = { data: [] };
 
 const getVehicles = async () => {
-  
   try {
-    const response = await fetch(mbta_url, mbta_options);
-    const lastModified = response.headers.get('Last-Modified');
-    if (lastModified !== mbta_options.headers['If-Modified-Since']) vehicles = await response.json();
-    if (lastModified) mbta_options.headers['If-Modified-Since'] = lastModified;
-    return vehicles;
+    const response = await fetch('/api/vehicles');
+    const responseData = await response.json();
+    if (response.ok) {
+      return responseData;
+    } else {
+      console.error(responseData.errorMessage);
+      console.error(responseData.error);
+    }
   } catch (error) {
-    console.error(`There was a problem getting the bus data from ${mbta_url}`);
     console.error(error);
-    return vehicles;
   }
+  return noVehicles;
 }
 
 const getVehiclesAndUpdateMarkers = () => {
@@ -64,6 +59,6 @@ const getVehiclesAndUpdateMarkers = () => {
 
 getVehiclesAndUpdateMarkers();
 
-setInterval(() => {
-  getVehiclesAndUpdateMarkers();
-}, 1500);
+// setInterval(() => {
+//   getVehiclesAndUpdateMarkers();
+// }, 1500);
