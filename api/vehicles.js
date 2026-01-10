@@ -13,7 +13,6 @@ const getVehicles = async (req, res) => {
     const lastModified = response.headers.get('Last-Modified');
     if (lastModified !== mbta_options.headers['If-Modified-Since']) vehicles = await response.json();
     if (lastModified) mbta_options.headers['If-Modified-Since'] = lastModified;
-    console.log(vehicles);
     res.status(200).json(vehicles);
   } catch (error) {
     const errorResponseObject = {

@@ -59,6 +59,6 @@ const getVehiclesAndUpdateMarkers = () => {
 
 getVehiclesAndUpdateMarkers();
 
-// setInterval(() => {
-//   getVehiclesAndUpdateMarkers();
-// }, 1500);
+setInterval(() => {
+  getVehiclesAndUpdateMarkers();
+}, 1500);
