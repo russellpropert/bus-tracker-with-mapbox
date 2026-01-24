@@ -17,9 +17,8 @@ const mapboxToken = await getMapboxToken();
 
 const createMap = () => {
   if (mapboxToken) {
-    mapboxgl.accessToken = mapboxToken;
-
     return new mapboxgl.Map({
+      accessToken: mapboxToken,
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v11',
       center: [-71.096081, 42.352554],
