@@ -95,7 +95,7 @@ if (map) {
     console.error(`Mapbox error. The map could not be loaded. mapMarkers.js: ${event.error}`);
   });
 
-  map.on('style.load', () => {
+  map.on('idle', () => {
     getVehiclesAndUpdateMarkers();
     
     setInterval(() => {
