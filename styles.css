@@ -1,11 +1,57 @@
-body {
+:root {
+  color: black;
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  box-sizing: border-box; 
+}
+
+* {
   margin: 0;
   padding: 0;
 }
 
+body {
+  width: 100vw;
+  height: 100dvh;
+  display: grid;
+  grid: 1fr 1fr;
+  justify-content: center;
+  align-content: center;
+}
+
 #map {
-  position: absolute;
+  z-index: 1;
+  position: fixed;
   top: 0;
   bottom: 0;
   width: 100%;
+}
+
+#error-message {
+  z-index: 2;
+  max-width: 60vw;
+  display: none;
+  grid-column: 1fr;
+  justify-items: center;
+  gap: .5rem;
+  padding: 1rem 2rem;
+  border: black solid 1px;
+  background-color: white;
+  border-radius: .5rem;
+}
+
+#error-message.visible {
+  display: grid;
+}
+
+#error-message-heading {
+  text-align: center;
+  color: red;
+  font-size: 1.5rem;
+}
+
+#error-message-body {
+  text-align: center;
+  color: black;
+  font-size: .8rem;
 }
