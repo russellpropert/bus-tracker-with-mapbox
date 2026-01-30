@@ -7,12 +7,14 @@ This project tracks the route 1 MBTA busses that travel Mass Ave in Boston and C
 - Fork the repository
 - Clone it to your machine
 - Create a mapbox account or sign in. [https://www.mapbox.com](https://www.mapbox.com).
-- Create a token for this project.
+- Create a token for this project. The token is public. Provide a URL if you want to implement URL restrictions.
 - Create an MBTA developer account or sign in. [https://api-v3.mbta.com](https://api-v3.mbta.com).
 - Request a new key for this project.
-- Create a config.js file in the root directory of this project using config.example.js as a template.
-- Replace 'mapbox-api-key-goes-here' and 'mbta-api-key-goes-here' with your API keys.
-- Use npx http-server in the command line or the Live Server extension in VS Code to start a server.
+- Create a .env file in the root directory of this project using .env.example as a template.
+- Replace 'your-mapbox-api-token-goes-here' and 'your-mbta-api-key-goes-here' with your respective API keys.
+- Install [Node.js](https://nodejs.org) if you don't have it already. You need Node.js for NPM. NPM comes with Node.js.
+- Run `npm install -g vercel` to globally install Vercel. Vercel is needed to run the serverless functions. The serverless functions are API endpoints in this project that get the API tokens from the .env file.
+- Run `vercel dev` and answer the prompts.
 - Navigate to the appropriate localhost port in your browser.
 
 ## Future Improvements
