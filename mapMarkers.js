@@ -1,38 +1,25 @@
+import './components/error-message.js';
+
 let map;
 const markers = [];
 
-const errorMessageElement = document.querySelector('#error-message');
-const errorMessageHeadingElement = document.querySelector('#error-message-heading');
-const errorMessageBodyElement = document.querySelector('#error-message-body');
-
-const displayErrorMessage = (errorMessageHeading, errorMessageBody) => { 
-  if (!errorMessageElement.classList.contains('visible')) errorMessageElement.classList.add('visible');
-  if (errorMessageHeadingElement.innerHTML !== errorMessageHeading) errorMessageHeadingElement.innerText = errorMessageHeading;
-  if (errorMessageBodyElement.innerHTML !== errorMessageBody) errorMessageBodyElement.innerText = errorMessageBody;
-  
-  console.error(errorMessageBody);
-};
-
-const resetErrorMessage = () => {
-   if (errorMessageElement.classList.contains('visible')) {
-    errorMessageElement.classList.remove('visible');
-    errorMessageHeadingElement.innerText = '';
-    errorMessageBodyElement.innerText = '';
-  }
-};
+const errorMessageElement = document.querySelector('error-message');
 
 const getMapboxToken = async () => {
+  let errorMessageBody = '';
   try {
     const response = await fetch('/api/mapboxAccessToken');
     const responseData = await response.json();
     if (response.ok) {
       return responseData.mapboxToken;
     } else {
-      console.error(`There was a problem with the response from /api/mapboxAccessToken in getMapboxToken in mapMarkers.js: ${responseData.errorMessage}`);
+      errorMessageBody = `The error was in the response from /api/mapboxAccessToken in getMapboxToken in mapMarkers.js: ${responseData.errorMessage}`;
     }
   } catch (error) {
-    console.error(`There was a problem fetching the Mapbox token from mapboxAccessToken.js: ${error}`);
+    errorMessageBody = `There was an error in getMapboxToken in mapMarkers.js: ${error}`;
   }
+  const errorMessageHeading = 'The Mapbox Token could not be retrieved.'
+  errorMessageElement.displayErrorMessage(errorMessageHeading, errorMessageBody);
   return null;
 };
 
@@ -71,7 +58,7 @@ const updateMarkers = (vehicles) => {
       const newMarker = new mapboxgl.Marker()
         .setLngLat([vehicle.attributes.longitude, vehicle.attributes.latitude])
         .addTo(map);
-      
+
       newMarker.id = vehicle.id;
 
       markers.push(newMarker);
@@ -80,21 +67,21 @@ const updateMarkers = (vehicles) => {
 };
 
 const getVehicles = async () => {
-  let errorMessageBody = null;
+  let errorMessageBody = '';
   try {
     const response = await fetch('/api/vehicles');
     const responseData = await response.json();
     if (response.ok) {
-      resetErrorMessage();
+      errorMessageElement.hideAndResetErrorMessage();
       return responseData.vehicles.data;
     } else {
-      errorMessageBody = `There was a problem with the response from /api/vehicles in getVehicles in mapMarkers.js: ${responseData.errorMessage}`;
+      errorMessageBody = `The error was in the response from /api/vehicles in getVehicles in mapMarkers.js: ${responseData.errorMessage}`;
     }
   } catch (error) {
     errorMessageBody = `There was an error in getVehicles in mapMarkers.js: ${error}`;
   }
   const errorMessageHeading = 'There was a problem getting the vehicle data for the map markers.';
-  displayErrorMessage(errorMessageHeading, errorMessageBody);
+  errorMessageElement.displayErrorMessage(errorMessageHeading, errorMessageBody);
   return [];
 };
 
@@ -108,30 +95,29 @@ const getVehiclesAndUpdateMarkers = () => {
     });
 };
 
-
 window.addEventListener('load', async () => {
-    const mapboxToken = await getMapboxToken();
-    map = createMap(mapboxToken);
-    
-    if (map) {
-      let error = false;
-    
-      map.on('error', (event) => {
-        error = true;
-        const errorMessageHeading = 'The map could not be loaded.';
-        const errorMessageBody = `Mapbox error. The map could not be loaded in mapMarkers.js. ${event.error.message}`;
-    
-        displayErrorMessage(errorMessageHeading, errorMessageBody);
-      });
-    
-      map.on('load', () => {
-        if (!error) {
+  const mapboxToken = await getMapboxToken();
+  map = createMap(mapboxToken);
+
+  if (map) {
+    let error = false;
+
+    map.on('error', (event) => {
+      error = true;
+      const errorMessageHeading = 'The map could not be loaded.';
+      const errorMessageBody = `Mapbox error. The map could not be loaded in mapMarkers.js. ${event.error.message}`;
+
+      errorMessageElement.displayErrorMessage(errorMessageHeading, errorMessageBody);
+    });
+
+    map.on('load', () => {
+      if (!error) {
+        getVehiclesAndUpdateMarkers();
+
+        setInterval(() => {
           getVehiclesAndUpdateMarkers();
-          
-          setInterval(() => {
-            getVehiclesAndUpdateMarkers();
-          }, 1500);
-        }
-      });
-    }
+        }, 1500);
+      }
+    });
+  }
 });
