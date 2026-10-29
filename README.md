@@ -1,7 +1,7 @@
 # Real Time Bus Tracker
 
 ## Description
-This project tracks the route 1 MBTA busses that travel Mass Ave in Boston and Cambridge. The page displays one marker per bus and updates every 15 seconds. The bus locations are derived from real time data pulled from [https://api-v3.mbta.com](https://api-v3.mbta.com).
+This project tracks the route 1 MBTA buses that travel Mass Ave in Boston and Cambridge. The page displays one marker per bus and updates every 15 seconds. The bus locations are derived from real time data pulled from [https://api-v3.mbta.com](https://api-v3.mbta.com).
 
 ## How To Run
 - Fork the repository
